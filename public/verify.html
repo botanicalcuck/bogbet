@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email - Arcade Games</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--primary:#00d4ff;--primary-glow:#00d4ff80;--success:#00ff88;--danger:#ff4757;--bg-dark:#0a0e17;--bg-card:#121a2d;--text-primary:#fff;--text-secondary:#8b9dc3;--border:#2a3a5c}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Rajdhani',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh;display:flex;align-items:center;justify-content:center}
+        .verify-container{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:3px solid var(--primary);border-radius:20px;padding:40px;max-width:450px;width:90%;text-align:center;position:relative}
+        .logo{font-size:60px;margin-bottom:20px}
+        h1{font-family:'Orbitron',sans-serif;font-size:28px;margin-bottom:15px;background:linear-gradient(135deg,var(--primary),#00ffcc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        p{color:var(--text-secondary);margin-bottom:25px;line-height:1.6}
+        .code-input{width:100%;padding:15px;font-family:'Orbitron',sans-serif;font-size:24px;letter-spacing:8px;text-align:center;background:var(--bg-dark);border:2px solid var(--border);border-radius:12px;color:var(--text-primary);margin-bottom:20px;outline:none;transition:all 0.3s}
+        .code-input:focus{border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow)}
+        .btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary),#0099cc);border:none;border-radius:12px;color:var(--bg-dark);font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;cursor:pointer;text-transform:uppercase;transition:all 0.3s}
+        .btn:hover{transform:scale(1.02);box-shadow:0 5px 25px var(--primary-glow)}
+        .btn:disabled{background:var(--border);cursor:not-allowed}
+        .resend{color:var(--text-secondary);margin-top:20px;font-size:14px}
+        .resend a{color:var(--primary);cursor:pointer;text-decoration:none}
+        .resend a:hover{text-decoration:underline}
+        .message{padding:15px;border-radius:8px;margin-bottom:20px;font-weight:600}
+        .message.success{background:rgba(0,255,136,0.2);border:1px solid var(--success);color:var(--success)}
+        .message.error{background:rgba(255,71,87,0.2);border:1px solid var(--danger);color:var(--danger)}
+        .message.info{background:rgba(0,212,255,0.2);border:1px solid var(--primary);color:var(--primary)}
+        .spinner{border:3px solid var(--border);border-top:3px solid var(--primary);border-radius:50%;width:30px;height:30px;animation:spin 1s linear infinite;margin:20px auto}
+        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+    <div class="verify-container">
+        <div class="logo">🎮</div>
+        <h1>Verify Your Email</h1>
+        
+        <div id="message" class="message info" style="display:none"></div>
+        
+        <div id="verifyForm">
+            <p>We've sent a 6-digit verification code to your email. Enter it below to verify your account.</p>
+            <input type="text" class="code-input" id="codeInput" maxlength="6" placeholder="000000">
+            <button class="btn" id="verifyBtn" onclick="verifyEmail()">Verify Email</button>
+        </div>
+
+        <div id="successMessage" style="display:none">
+            <p>🎉 Your email has been verified!</p>
+            <p>Redirecting to login...</p>
+            <div class="spinner"></div>
+        </div>
+
+        <div class="resend">
+            Didn't receive the code? <a onclick="resendCode()">Resend Email</a>
+        </div>
+    </div>
+
+    <script>
+        // Get email from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const userEmail = urlParams.get('email') || localStorage.getItem('pendingEmail');
+        
+        if (!userEmail) {
+            document.getElementById('message').textContent = 'No email provided. Please register first.';
+            document.getElementById('message').className = 'message error';
+            document.getElementById('message').style.display = 'block';
+            document.getElementById('verifyForm').style.display = 'none';
+        }
+
+        async function verifyEmail() {
+            const code = document.getElementById('codeInput').value.trim();
+            const messageEl = document.getElementById('message');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            if (!code || code.length !== 6) {
+                messageEl.textContent = 'Please enter a valid 6-digit code.';
+                messageEl.className = 'message error';
+                messageEl.style.display = 'block';
+                return;
+            }
+
+            verifyBtn.disabled = true;
+            verifyBtn.textContent = 'Verifying...';
+
+            try {
+                const response = await fetch('/api/verify-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('verifyForm').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    
+                    // Store token and redirect
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('pendingEmail', '');
+                    
+                    setTimeout(() => {
+                        window.location.href = '/';
+                    }, 2000);
+                } else {
+                    messageEl.textContent = data.error || 'Verification failed';
+                    messageEl.className = 'message error';
+                    messageEl.style.display = 'block';
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Verify Email';
+                }
+            } catch (e) {
+                messageEl.textContent = 'Connection error. Please try again.';
+                messageEl.className = 'message error';
+                messageEl.style.display = 'block';
+                verifyBtn.disabled = false;
+                verifyBtn.textContent = 'Verify Email';
+            }
+        }
+
+        async function resendCode() {
+            const messageEl = document.getElementById('message');
+            
+            try {
+                const response = await fetch('/api/resend-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: userEmail })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    messageEl.textContent = 'Verification email resent! Check your inbox.';
+                    messageEl.className = 'message success';
+                } else {
+                    messageEl.textContent = data.error || 'Failed to resend';
+                    messageEl.className = 'message error';
+                }
+                messageEl.style.display = 'block';
+            } catch (e) {
+                messageEl.textContent = 'Connection error. Please try again.';
+                messageEl.className = 'message error';
+                messageEl.style.display = 'block';
+            }
+        }
+
+        // Auto-submit when 6 digits entered
+        document.getElementById('codeInput').addEventListener('input', function(e) {
+            this.value = this.value.replace(/[^0-9]/g, '');
+            if (this.value.length === 6) {
+                verifyEmail();
+            }
+        });
+    </script>
+</body>
+</html>

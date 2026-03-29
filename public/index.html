@@ -1,0 +1,2186 @@
+<<<<<<< HEAD
+n<!DOCTYPE html>
+=======
+<!DOCTYPE html>
+>>>>>>> bd538903270de3035f6b409ee70671dd19850d72
+<html lang="en">                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bogbet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{--primary:#00d4ff;--primary-glow:#00d4ff80;--secondary:#ff6b35;--accent:#ffd700;--bg-dark:#0a0e17;--bg-card:#121a2d;--text-primary:#fff;--text-secondary:#8b9dc3;--success:#00ff88;--danger:#ff4757;--border:#2a3a5c}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Rajdhani',sans-serif;background:var(--bg-dark);color:var(--text-primary);min-height:100vh}
+        .container{max-width:1400px;margin:0 auto;padding:20px}
+        
+        /* Auth Modal Styles */
+        .auth-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:5000;justify-content:center;align-items:center}
+        .auth-overlay.show{display:flex}
+        .auth-modal{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:3px solid var(--primary);border-radius:20px;padding:40px;max-width:420px;width:90%;text-align:center;position:relative;animation:modalSlideIn 0.3s ease}
+        @keyframes modalSlideIn{from{transform:translateY(-50px);opacity:0}to{transform:translateY(0);opacity:1}}
+        .auth-close{position:absolute;top:15px;right:20px;background:none;border:none;color:var(--text-secondary);font-size:28px;cursor:pointer}
+        .auth-close:hover{color:var(--primary)}
+        .auth-title{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,var(--primary) 0%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .auth-subtitle{color:var(--text-secondary);margin-bottom:25px;font-size:14px}
+        .auth-input{width:100%;padding:15px 20px;background:var(--bg-dark);border:2px solid var(--border);border-radius:12px;color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-size:18px;margin-bottom:15px;outline:none;transition:all 0.3s}
+        .auth-input:focus{border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow)}
+        .auth-input::placeholder{color:var(--text-secondary)}
+        .auth-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);border:none;border-radius:12px;color:var(--bg-dark);font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:15px;transition:all 0.3s;text-transform:uppercase}
+        .auth-btn:hover{transform:scale(1.02);box-shadow:0 5px 25px var(--primary-glow)}
+        .auth-btn.secondary{background:transparent;border:2px solid var(--border);color:var(--text-primary)}
+        .auth-btn.secondary:hover{border-color:var(--primary);color:var(--primary)}
+        .auth-switch{color:var(--text-secondary);font-size:14px}
+        .auth-switch a{color:var(--primary);cursor:pointer;text-decoration:none}
+        .auth-switch a:hover{text-decoration:underline}
+        .auth-error{background:rgba(255,71,87,0.2);border:1px solid var(--danger);color:var(--danger);padding:12px;border-radius:8px;margin-bottom:15px;font-size:14px;display:none}
+        .auth-error.show{display:block}
+        
+        .header{display:flex;justify-content:space-between;align-items:center;padding:20px 30px;background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border-radius:16px;border:1px solid var(--border);margin-bottom:20px}
+        .logo{display:flex;align-items:center;gap:12px}
+        .logo-icon{width:50px;height:50px;background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px}
+        .logo-text{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--primary) 0%,#00ffcc 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .user-section{display:flex;align-items:center;gap:15px}
+        .user-info{text-align:right}
+        .user-email{font-size:12px;color:var(--text-secondary)}
+        .user-balance{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--success)}
+        .balance-card{background:linear-gradient(135deg,#1a2540 0%,#0d1424 100%);padding:12px 24px;border-radius:12px;border:1px solid var(--border)}
+        .balance-label{font-size:12px;color:var(--text-secondary);text-transform:uppercase}
+        .balance-amount{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:700;color:var(--success)}
+        .auth-buttons{display:flex;gap:10px}
+        .header-btn{padding:10px 20px;background:transparent;border:2px solid var(--border);border-radius:8px;color:var(--text-primary);font-family:'Rajdhani',sans-serif;font-weight:600;cursor:pointer;transition:all 0.3s}
+        .header-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .header-btn.primary{background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);border:none;color:var(--bg-dark)}
+        
+        .guest-notice{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:2px solid var(--accent);border-radius:12px;padding:20px;margin-bottom:20px;text-align:center}
+        .guest-notice h3{font-family:'Orbitron',sans-serif;color:var(--accent);margin-bottom:10px}
+        .guest-notice p{color:var(--text-secondary);margin-bottom:15px}
+        
+        .main-menu{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;gap:30px}
+        .main-menu.guest-mode{min-height:50vh}
+        .menu-title{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900;background:linear-gradient(135deg,var(--primary) 0%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        .menu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:30px;width:100%;max-width:1000px;padding:0 20px}
+        .menu-card{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:2px solid var(--border);border-radius:20px;padding:40px;text-align:center;cursor:pointer;transition:all 0.3s ease;position:relative}
+        .menu-card:hover:not(.locked){transform:translateY(-5px);border-color:var(--primary);box-shadow:0 10px 40px rgba(0,212,255,0.3)}
+        .menu-card.locked{cursor:not-allowed;opacity:0.7}
+        .menu-card.locked::after{content:'🔒';position:absolute;top:15px;right:15px;font-size:24px}
+        .menu-icon{font-size:64px;margin-bottom:15px}
+        .menu-name{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;margin-bottom:10px}
+        .menu-desc{color:var(--text-secondary);font-size:14px;margin-bottom:15px}
+        .unlock-btn,.jobs-btn{margin-top:20px;padding:15px 40px;border:none;border-radius:12px;font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;text-transform:uppercase}
+        .unlock-btn{background:linear-gradient(135deg,var(--success) 0%,#00cc6a 100%);color:var(--bg-dark)}
+        .unlock-btn:hover:not(:disabled){transform:scale(1.05)}
+        .unlock-btn:disabled{background:var(--border);color:var(--text-secondary);cursor:not-allowed}
+        .jobs-btn{background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);color:var(--bg-dark)}
+        
+        .jobs-section{display:none;flex-direction:column;align-items:center;gap:20px}
+        .jobs-section.show{display:flex}
+        .section-header{display:flex;align-items:center;gap:20px;margin-bottom:20px;width:100%;max-width:1000px}
+        .back-btn{padding:12px 24px;background:var(--bg-card);border:2px solid var(--border);border-radius:10px;color:var(--text-primary);font-family:'Orbitron',sans-serif;font-size:14px;cursor:pointer}
+        .back-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .section-title{font-family:'Orbitron',sans-serif;font-size:32px;font-weight:700;flex:1;text-align:center}
+        .jobs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;width:100%;max-width:1000px}
+        .job-card{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:2px solid var(--border);border-radius:16px;padding:25px;text-align:center}
+        .job-card:hover:not(.locked){border-color:var(--success);transform:translateY(-3px)}
+        .job-card.locked{border-color:var(--danger);opacity:0.8}
+        .job-level{font-family:'Orbitron',sans-serif;font-size:12px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+        .job-icon{font-size:48px;margin-bottom:10px}
+        .job-name{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px}
+        .job-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:15px 0;padding:15px;background:var(--bg-dark);border-radius:10px}
+        .job-stat-label{font-size:10px;color:var(--text-secondary);text-transform:uppercase}
+        .job-stat-value{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--success)}
+        .start-job-btn{width:100%;padding:15px;background:linear-gradient(135deg,var(--success) 0%,#00cc6a 100%);border:none;border-radius:10px;color:var(--bg-dark);font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;cursor:pointer}
+        .start-job-btn:disabled{background:var(--border);color:var(--text-secondary);cursor:not-allowed}
+        
+        .game-section{display:none}
+        .game-section.show{display:block}
+        .game-header-with-back{display:flex;align-items:center;gap:20px;margin-bottom:20px}
+        .game-wrapper{display:grid;grid-template-columns:320px 1fr;gap:20px}
+        .sidebar{display:flex;flex-direction:column;gap:16px}
+        .control-card{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border-radius:16px;border:1px solid var(--border);padding:24px}
+        .control-title{font-family:'Orbitron',sans-serif;font-size:14px;color:var(--text-secondary);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px}
+        .bet-input-group{display:flex;align-items:center;gap:10px;margin-bottom:20px}
+        .bet-input-wrapper{flex:1;display:flex;align-items:center;background:var(--bg-dark);border-radius:12px;border:2px solid var(--border);overflow:hidden}
+        .bet-input-wrapper:focus-within{border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow)}
+        .bet-currency{padding:0 16px;font-size:18px;color:var(--success);font-weight:600}
+        .bet-input{flex:1;background:transparent;border:none;padding:16px 8px;font-family:'Orbitron',sans-serif;font-size:24px;color:var(--text-primary);text-align:right;outline:none;width:100%}
+        .bet-btn{width:44px;height:44px;background:var(--bg-dark);border:2px solid var(--border);border-radius:10px;color:var(--text-primary);font-size:24px;cursor:pointer}
+        .bet-btn:hover{background:var(--primary);border-color:var(--primary);color:var(--bg-dark)}
+        .quick-bets{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+        .quick-bet-btn{padding:10px 8px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-secondary);font-family:'Rajdhani',sans-serif;font-weight:600;font-size:14px;cursor:pointer}
+        .risk-selector{display:flex;gap:8px;margin-bottom:20px}
+        .risk-btn{flex:1;padding:14px 10px;background:var(--bg-dark);border:2px solid var(--border);border-radius:10px;color:var(--text-secondary);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;text-transform:uppercase;cursor:pointer}
+        .risk-btn.active{border-color:var(--primary);background:rgba(0,212,255,0.1);color:var(--primary);box-shadow:0 0 15px var(--primary-glow)}
+        .rows-selector{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .rows-btn{width:36px;height:36px;background:var(--bg-dark);border:1px solid var(--border);border-radius:8px;color:var(--text-primary);font-size:18px;cursor:pointer}
+        .rows-value{font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;min-width:40px;text-align:center;color:var(--primary)}
+        .drop-btn{width:100%;padding:20px;background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);border:none;border-radius:12px;color:var(--bg-dark);font-family:'Orbitron',sans-serif;font-size:20px;font-weight:700;text-transform:uppercase;cursor:pointer;box-shadow:0 4px 20px var(--primary-glow)}
+        .drop-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--primary-glow)}
+        .drop-btn:disabled{background:var(--border);cursor:not-allowed}
+        
+        .plinko-board{position:relative;width:100%;height:700px;background:linear-gradient(180deg,#0d1424 0%,#0a0e17 100%);border-radius:16px;overflow:hidden;border:2px solid var(--border)}
+        .peg{position:absolute;width:10px;height:10px;background:radial-gradient(circle at 30% 30%,#718096 0%,#4a5568 50%,#2d3748 100%);border-radius:50%;z-index:5}
+        .peg.hit{background:radial-gradient(circle at 30% 30%,var(--primary) 0%,#0099cc 100%);box-shadow:0 0 20px var(--primary-glow)}
+        .ball{position:absolute;width:22px;height:22px;font-size:20px;line-height:22px;text-align:center;z-index:10}
+        .slots-container{position:absolute;bottom:0;left:0;right:0;display:flex;height:50px;border-top:2px solid var(--border);padding:0 30px}
+        .slot{flex:1;display:flex;align-items:center;justify-content:center;background:var(--bg-dark);border-right:1px solid var(--border);font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700}
+        .slot:last-child{border-right:none}
+        .slot.active{animation:slotPulse 0.5s ease}
+        @keyframes slotPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+        
+        .result-popup{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:3px solid var(--primary);border-radius:20px;padding:40px 60px;text-align:center;z-index:100;opacity:0;transition:all 0.3s ease}
+        .result-popup.show{transform:translate(-50%,-50%) scale(1);opacity:1}
+        .result-popup.win{border-color:var(--success);box-shadow:0 0 60px rgba(0,255,136,0.5)}
+        .result-popup.lose{border-color:var(--danger)}
+        .result-label{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;text-transform:uppercase}
+        .result-amount{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:900}
+        
+        .job-game-modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:3000;justify-content:center;align-items:center}
+        .job-game-modal.show{display:flex}
+        .job-game-content{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:3px solid var(--danger);border-radius:20px;padding:40px;text-align:center;max-width:600px;width:90%;position:relative}
+        .job-game-title{font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--danger);margin-bottom:20px}
+        .job-balance-display{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--success);margin-bottom:15px}
+        .job-close-btn{position:absolute;top:15px;right:15px;background:none;border:none;color:var(--text-secondary);font-size:28px;cursor:pointer}
+        .job-timer-bar{width:100%;height:10px;background:var(--bg-dark);border-radius:5px;margin-bottom:20px;overflow:hidden}
+        .job-timer-fill{height:100%;background:linear-gradient(90deg,var(--success) 0%,var(--primary) 100%);transition:width 0.1s linear}
+        .job-timer-text{font-family:'Orbitron',sans-serif;font-size:36px;font-weight:900;color:var(--primary);margin-bottom:20px}
+        .job-result-text{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:700;margin-top:20px}
+        .job-result-text.success{color:var(--success)}
+        .job-result-text.fail{color:var(--danger)}
+        .job-auto-replay{margin-top:15px;display:flex;align-items:center;justify-content:center;gap:10px;color:var(--text-secondary)}
+        
+        .minigame-container{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+        .game-btn{padding:15px 40px;background:linear-gradient(135deg,var(--secondary) 0%,#cc5500 100%);border:none;border-radius:12px;color:white;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:700;cursor:pointer;margin:10px}
+        .game-btn:active{transform:scale(0.95)}
+        .game-display{font-family:'Orbitron',sans-serif;font-size:32px;margin-bottom:20px;color:var(--accent)}
+        .game-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px auto}
+        .game-cell{width:80px;height:80px;background:var(--bg-dark);border:3px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:36px;cursor:pointer;transition:all 0.3s}
+        .game-cell:hover{border-color:var(--primary)}
+        .game-cell.lit{background:var(--primary);border-color:var(--primary);box-shadow:0 0 20px var(--primary-glow)}
+        .game-cell.wrong{background:var(--danger);animation:shake 0.5s}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+        
+        .catch-game{position:relative;width:100%;height:250px;background:linear-gradient(180deg,#87CEEB 0%,#E0F6FF 100%);border-radius:16px;overflow:hidden;margin-bottom:20px}
+        .catch-basket{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:100px;height:40px;background:#8B4513;border-radius:0 0 50px 50px;font-size:30px;display:flex;align-items:center;justify-content:center}
+        .catch-item{position:absolute;font-size:30px}
+        .dodge-game{position:relative;width:100%;height:250px;background:linear-gradient(180deg,#1e3c72 0%,#2a5298 100%);border-radius:16px;overflow:hidden;margin-bottom:20px}
+        .dodge-player{position:absolute;left:20px;font-size:40px;transition:top 0.1s ease}
+        .dodge-obstacle{position:absolute;right:-50px;font-size:30px}
+        
+        .toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:10000;display:flex;flex-direction:column;gap:10px}
+        .toast{background:linear-gradient(135deg,var(--danger) 0%,#cc3344 100%);color:white;padding:12px 24px;border-radius:8px;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:600;opacity:0;transform:translateY(-20px);transition:all 0.3s ease}
+        .toast.show{opacity:1;transform:translateY(0);animation:toastShake 0.5s ease}
+        @keyframes toastShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+        
+        @media(max-width:1200px){.game-wrapper{grid-template-columns:1fr}.sidebar{display:grid;grid-template-columns:repeat(2,1fr)}}
+<<<<<<< HEAD
+        @media(max-width:768px){
+            .rows-selector{display:none}
+            .plinko-board{height:320px;border-radius:10px}
+            .peg{width:5px;height:5px}
+            .ball{width:12px;height:12px;font-size:10px;line-height:12px}
+            .slots-container{height:28px;padding:0 8px}
+            .slot{font-size:8px}
+            .multiplier{font-size:7px}
+        }
+=======
+        @media(max-width:768px){.menu-title{font-size:32px}.menu-grid,.jobs-grid{grid-template-columns:1fr}}
+>>>>>>> bd538903270de3035f6b409ee70671dd19850d72
+        
+        /* Shop Styles */
+        .shop-section{display:none;flex-direction:column;align-items:center;gap:20px}
+        .shop-section.show{display:flex}
+        .shop-filters{display:flex;gap:10px;margin-bottom:20px}
+        .shop-filter-btn{padding:10px 20px;background:var(--bg-card);border:2px solid var(--border);border-radius:8px;color:var(--text-secondary);font-family:'Rajdhani',sans-serif;font-weight:600;cursor:pointer;transition:all 0.3s}
+        .shop-filter-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .shop-filter-btn.active{background:var(--primary);border-color:var(--primary);color:var(--bg-dark)}
+        .shop-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;width:100%;max-width:1000px}
+        .shop-item{background:linear-gradient(135deg,var(--bg-card) 0%,#1a2540 100%);border:2px solid var(--border);border-radius:16px;padding:20px;text-align:center;transition:all 0.3s}
+        .shop-item:hover{border-color:var(--accent);transform:translateY(-3px)}
+        .shop-item.owned{border-color:var(--success);opacity:0.8}
+        .shop-item-icon{font-size:48px;margin-bottom:10px}
+        .shop-item-name{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;margin-bottom:5px}
+        .shop-item-desc{font-size:12px;color:var(--text-secondary);margin-bottom:10px}
+        .shop-item-price{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--accent);margin-bottom:10px}
+        .shop-buy-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--accent) 0%,#cc9900 100%);border:none;border-radius:8px;color:var(--bg-dark);font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;cursor:pointer}
+        .shop-buy-btn:hover{transform:scale(1.05)}
+        .shop-buy-btn:disabled{background:var(--border);color:var(--text-secondary);cursor:not-allowed}
+        .shop-buy-btn.owned{background:var(--success);color:var(--bg-dark)}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🎮</div>
+                <span class="logo-text">BOGBET</span>
+            </div>
+            <div class="user-section" id="userSection">
+            </div>
+        </header>
+
+        <div class="guest-notice" id="guestNotice">
+            <h3>👋 Welcome to Bogbet!</h3>
+            <p>Sign up to save your progress and balance!</p>
+            <div class="auth-buttons" style="justify-content:center">
+                <button class="header-btn primary" onclick="showAuthModal('login')">Login</button>
+                <button class="header-btn" onclick="showAuthModal('register')">Sign Up</button>
+            </div>
+        </div>
+
+        <div class="main-menu" id="mainMenu">
+            <div class="menu-title">SELECT GAME</div>
+            <div class="menu-grid">
+                <div class="menu-card" id="jobsCard">
+                    <div class="menu-icon">💼</div>
+                    <div class="menu-name">JOBS</div>
+                    <div class="menu-desc">Work hard, earn money!<br>8 unique minigames</div>
+                    <button class="jobs-btn" onclick="showJobs()">View Jobs</button>
+                </div>
+                <div class="menu-card" id="shopCard">
+                    <div class="menu-icon">🛒</div>
+                    <div class="menu-name">ITEM SHOP</div>
+                    <div class="menu-desc">Buy skins & trails<br>Customize your style!</div>
+                    <button class="jobs-btn" onclick="showShop()">Browse Shop</button>
+                </div>
+                <div class="menu-card locked" id="plinkoCard">
+                    <div class="menu-icon">🎯</div>
+                    <div class="menu-name">PLINKO</div>
+                    <div class="menu-desc">Drop balls, win big!<br>High risk, high reward</div>
+                    <div class="menu-cost">🔒 Cost: $100</div>
+                    <button class="unlock-btn" id="unlockPlinkoBtn" onclick="unlockPlinko()">Unlock</button>
+                </div>
+                <div class="menu-card locked" id="blackjackCard">
+                    <div class="menu-icon">🃏</div>
+                    <div class="menu-name">BLACKJACK</div>
+                    <div class="menu-desc">Beat the dealer!<br>Get closest to 21</div>
+                    <div class="menu-cost">🔒 Cost: 20k</div>
+                    <button class="unlock-btn" id="unlockBlackjackBtn" onclick="unlockBlackjack()">Unlock</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="jobs-section" id="jobsSection">
+            <div class="section-header">
+                <button class="back-btn" onclick="showMenu()">← Menu</button>
+                <div class="section-title">💼 AVAILABLE JOBS</div>
+            </div>
+            <div class="jobs-grid" id="jobsGrid"></div>
+        </div>
+
+        <div class="shop-section" id="shopSection">
+            <div class="section-header">
+                <button class="back-btn" onclick="showMenu()">← Menu</button>
+                <div class="section-title">🛒 ITEM SHOP</div>
+            </div>
+            <div class="shop-filters">
+                <button class="shop-filter-btn active" onclick="filterShop('all')">All</button>
+                <button class="shop-filter-btn" onclick="filterShop('skins')">Skins</button>
+                <button class="shop-filter-btn" onclick="filterShop('trails')">Trails</button>
+            </div>
+            <div class="shop-grid" id="shopGrid"></div>
+        </div>
+
+        <div class="game-section" id="plinkoSection">
+            <div class="game-header-with-back">
+                <button class="back-btn" onclick="showMenu()">← Menu</button>
+                <div class="section-title">🎯 PLINKO</div>
+            </div>
+            <div class="game-wrapper">
+                <div class="sidebar">
+                    <div class="control-card">
+                        <div class="control-title">Bet Amount</div>
+                        <div class="bet-input-group">
+                            <div class="bet-input-wrapper">
+                                <span class="bet-currency">$</span>
+                                <input type="number" class="bet-input" id="betInput" value="1" min="0.10" max="1000" step="0.10">
+                            </div>
+                            <button class="bet-btn" onclick="adjustBet(-1)">−</button>
+                            <button class="bet-btn" onclick="adjustBet(1)">+</button>
+                        </div>
+                        <div class="quick-bets">
+                            <button class="quick-bet-btn" onclick="setBet(1)">$1</button>
+                            <button class="quick-bet-btn" onclick="setBet(5)">$5</button>
+                            <button class="quick-bet-btn" onclick="setBet(10)">$10</button>
+                            <button class="quick-bet-btn" onclick="setBet(50)">$50</button>
+                        </div>
+                    </div>
+                    <div class="control-card">
+                        <div class="control-title">Risk Level</div>
+                        <div class="risk-selector">
+                            <button class="risk-btn low active" onclick="setRisk('low')">Low</button>
+                            <button class="risk-btn medium" onclick="setRisk('medium')">Medium</button>
+                            <button class="risk-btn high" onclick="setRisk('high')">High</button>
+                        </div>
+                    </div>
+<<<<<<< HEAD
+=======
+                    <div class="control-card">
+                        <div class="control-title">Rows: <span id="rowsValue">12</span></div>
+                        <div class="rows-selector">
+                            <button class="rows-btn" onclick="adjustRows(-1)">−</button>
+                            <button class="rows-btn" onclick="adjustRows(1)">+</button>
+                        </div>
+                    </div>
+>>>>>>> bd538903270de3035f6b409ee70671dd19850d72
+                    <button class="drop-btn" id="dropBtn" onclick="dropBall()">DROP BALL</button>
+                </div>
+                <div class="game-board-container">
+                    <div class="plinko-board" id="plinkoBoard">
+                        <div class="slots-container" id="slotsContainer"></div>
+                        <div class="result-popup" id="resultPopup">
+                            <div class="result-label" id="resultLabel">WIN!</div>
+                            <div class="result-amount" id="resultAmount">+$0.00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-section" id="blackjackSection">
+            <div class="game-header-with-back">
+                <button class="back-btn" onclick="showMenu()">← Menu</button>
+                <div class="section-title">🃏 BLACKJACK</div>
+            </div>
+            <div style="max-width:800px;margin:0 auto;padding:20px">
+                <div style="background:linear-gradient(180deg,#1a472a 0%,#0d2818 100%);border-radius:20px;border:4px solid #8b6914;padding:30px;min-height:400px">
+                    <div style="text-align:center;margin-bottom:20px">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:#8b6914;letter-spacing:3px">DEALER</div>
+                        <div id="dealerHand" style="display:flex;gap:10px;justify-content:center;min-height:100px;margin:10px 0"></div>
+                        <div id="dealerValue" style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--accent)">0</div>
+                    </div>
+                    <div id="gameMessage" style="text-align:center;font-family:'Orbitron',sans-serif;font-size:24px;font-weight:900;color:var(--accent);margin:20px 0">Place your bet!</div>
+                    <div style="text-align:center;margin-top:20px">
+                        <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:#8b6914;letter-spacing:3px">PLAYER</div>
+                        <div id="playerHand" style="display:flex;gap:10px;justify-content:center;min-height:100px;margin:10px 0"></div>
+                        <div id="playerValue" style="font-family:'Orbitron',sans-serif;font-size:20px;color:var(--accent)">0</div>
+                    </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px">
+                    <div class="control-card">
+                        <div class="control-title">Bet Amount</div>
+                        <div class="bet-input-group">
+                            <div class="bet-input-wrapper">
+                                <span class="bet-currency">$</span>
+                                <input type="number" class="bet-input" id="bjBetInput" value="5" min="1" max="1000" step="1">
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                        <button class="game-btn" style="background:var(--success);color:var(--bg-dark)" id="dealBtn" onclick="dealBlackjack()">DEAL</button>
+                        <button class="game-btn" id="hitBtn" onclick="hit()" disabled>HIT</button>
+                        <button class="game-btn" id="standBtn" onclick="stand()" disabled>STAND</button>
+                        <button class="game-btn" id="doubleBtn" onclick="doubleDown()" disabled>DOUBLE</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="toast-container" id="toastContainer"></div>
+
+        <div class="job-game-modal" id="jobGameModal">
+            <div class="job-game-content">
+                <button class="job-close-btn" onclick="closeJobGame()">×</button>
+                <div class="job-game-title" id="jobGameTitle">WORK!</div>
+                <div class="job-balance-display" id="jobBalanceDisplay">Balance: $10.00</div>
+                <div class="job-timer-bar"><div class="job-timer-fill" id="jobTimerFill"></div></div>
+                <div class="job-timer-text" id="jobTimerText">5.0s</div>
+                <div id="minigameArea" class="minigame-container"></div>
+                <div class="job-result-text" id="jobResultText"></div>
+                <div class="job-auto-replay">
+                    <input type="checkbox" id="autoReplayCheck" checked>
+                    <label for="autoReplayCheck">Auto-replay job</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal">
+            <button class="auth-close" onclick="closeAuthModal()">×</button>
+            <div id="loginForm">
+                <div class="auth-title">Welcome Back!</div>
+                <div class="auth-subtitle">Login to your account</div>
+                <div class="auth-error" id="loginError"></div>
+                <input type="email" class="auth-input" id="loginEmail" placeholder="Email address">
+                <input type="password" class="auth-input" id="loginPassword" placeholder="Password">
+                <button class="auth-btn" onclick="handleLogin()">Login</button>
+                <div class="auth-switch">
+                    Don't have an account? <a onclick="switchAuthForm('register')">Sign up</a>
+                </div>
+            </div>
+            <div id="registerForm" style="display:none">
+                <div class="auth-title">Create Account!</div>
+                <div class="auth-subtitle">Sign up to start playing</div>
+                <div class="auth-error" id="registerError"></div>
+                <input type="email" class="auth-input" id="registerEmail" placeholder="Email address">
+                <input type="password" class="auth-input" id="registerPassword" placeholder="Password (min 6 chars)">
+                <button class="auth-btn" onclick="handleRegister()">Create Account</button>
+                <div class="auth-switch">
+                    Already have an account? <a onclick="switchAuthForm('login')">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = localStorage.getItem('token');
+        let currentUser = null;
+        let isGuest = true;
+        let balanceRefreshInterval = null;
+        let gameInProgress = false; // Flag to prevent balance refresh during active gameplay
+
+        // Start periodic balance refresh for logged-in users
+        function startBalanceRefresh() {
+            if (balanceRefreshInterval) clearInterval(balanceRefreshInterval);
+            if (!isGuest && authToken) {
+                balanceRefreshInterval = setInterval(async () => {
+                    // Don't refresh balance during active gameplay
+                    if (gameInProgress || !authToken || isGuest) return;
+                    
+                    try {
+                        const response = await fetch('/api/user', {
+                            headers: { 'Authorization': `Bearer ${authToken}` }
+                        });
+                        if (response.ok) {
+                            const userData = await response.json();
+                            if (currentUser) {
+                                currentUser.balance = userData.balance;
+                                currentUser.unlockedGames = userData.unlockedGames;
+                                currentUser.level = userData.level;
+                                currentUser.xp = userData.xp;
+                                // Also update local balance for game logic
+                                balance = userData.balance;
+                            }
+                            updateAuthUI();
+                        }
+                    } catch (e) {
+                        console.error('Balance refresh failed:', e);
+                    }
+                }, 2000); // Refresh every 2 seconds
+            }
+        }
+
+        // Stop balance refresh
+        function stopBalanceRefresh() {
+            if (balanceRefreshInterval) {
+                clearInterval(balanceRefreshInterval);
+                balanceRefreshInterval = null;
+            }
+        }
+
+        async function checkAuth() {
+            if (authToken) {
+                try {
+                    const response = await fetch('/api/user', {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    });
+                    if (response.ok) {
+                        currentUser = await response.json();
+                        isGuest = false;
+                        // Sync local balance with server balance
+                        balance = currentUser.balance;
+                        unlockedGames = { ...currentUser.unlockedGames };
+                        // Load shop data
+                        ownedItems = currentUser.ownedItems || ['skin_default', 'trail_none'];
+                        currentSkin = currentUser.equippedSkin || 'skin_default';
+                        currentTrail = currentUser.equippedTrail || 'trail_none';
+                        updateAuthUI();
+                        startBalanceRefresh();
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Auth check failed:', e);
+                }
+            }
+            authToken = null;
+            currentUser = null;
+            isGuest = true;
+            stopBalanceRefresh();
+            updateAuthUI();
+        }
+
+        function updateAuthUI() {
+            const userSection = document.getElementById('userSection');
+            const guestNotice = document.getElementById('guestNotice');
+            const mainMenu = document.getElementById('mainMenu');
+
+            if (!isGuest && currentUser) {
+                const userLevel = currentUser.level || 1;
+                const xpForNext = userLevel * 100;
+                const userXp = currentUser.xp || 0;
+                userSection.innerHTML = `
+                    <div class="user-info">
+                        <div class="user-email">${currentUser.email}</div>
+                        <div style="display:flex;align-items:center;gap:10px">
+                            <div class="user-balance" id="headerBalance">$${currentUser.balance.toFixed(2)}</div>
+                            <div style="background:linear-gradient(135deg,var(--primary) 0%,#0099cc 100%);padding:4px 10px;border-radius:6px;font-family:Orbitron, sans-serif;font-size:12px;color:var(--bg-dark);font-weight:700">Lv.${userLevel}</div>
+                        </div>
+                        <div style="font-size:10px;color:var(--text-secondary)">XP: ${userXp}/${xpForNext}</div>
+                    </div>
+                    <button class="header-btn" onclick="handleLogout()">Logout</button>
+                `;
+                guestNotice.style.display = 'none';
+                mainMenu.classList.remove('guest-mode');
+            } else {
+                userSection.innerHTML = `
+                    <div class="auth-buttons">
+                        <button class="header-btn" onclick="showAuthModal('login')">Login</button>
+                        <button class="header-btn primary" onclick="showAuthModal('register')">Sign Up</button>
+                    </div>
+                `;
+                guestNotice.style.display = 'block';
+                mainMenu.classList.add('guest-mode');
+            }
+            updateUnlockButtons();
+            renderJobs();
+        }
+
+        function showAuthModal(form = 'login') {
+            document.getElementById('authOverlay').classList.add('show');
+            switchAuthForm(form);
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authOverlay').classList.remove('show');
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('registerError').classList.remove('show');
+        }
+
+        function switchAuthForm(form) {
+            document.getElementById('loginForm').style.display = form === 'login' ? 'block' : 'none';
+            document.getElementById('registerForm').style.display = form === 'register' ? 'block' : 'none';
+            document.getElementById('loginError').classList.remove('show');
+            document.getElementById('registerError').classList.remove('show');
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const errorEl = document.getElementById('loginError');
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (data.needsVerification) {
+                        localStorage.setItem('pendingEmail', email);
+                        closeAuthModal();
+                        showVerificationPrompt(email);
+                        return;
+                    }
+                    errorEl.textContent = data.error;
+                    errorEl.classList.add('show');
+                    return;
+                }
+
+                authToken = data.token;
+                currentUser = data.user;
+                isGuest = false;
+                localStorage.setItem('token', authToken);
+                
+                // Sync local balance with server balance
+                balance = currentUser.balance;
+                unlockedGames = { ...currentUser.unlockedGames };
+                // Load shop data
+                ownedItems = currentUser.ownedItems || ['skin_default', 'trail_none'];
+                currentSkin = currentUser.equippedSkin || 'skin_default';
+                currentTrail = currentUser.equippedTrail || 'trail_none';
+                
+                closeAuthModal();
+                updateAuthUI();
+                startBalanceRefresh();
+                showToast('Welcome back, ' + email + '!');
+
+            } catch (e) {
+                errorEl.textContent = 'Connection error. Please try again.';
+                errorEl.classList.add('show');
+            }
+        }
+
+        async function handleRegister() {
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const errorEl = document.getElementById('registerError');
+
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    errorEl.textContent = data.error;
+                    errorEl.classList.add('show');
+                    return;
+                }
+
+                // Store pending email for verification
+                localStorage.setItem('pendingEmail', email);
+                closeAuthModal();
+                
+                // Show verification prompt - email will be sent automatically
+                showVerificationPrompt(email);
+                showToast('Verification email sent! Check your inbox.');
+
+            } catch (e) {
+                errorEl.textContent = 'Connection error. Please try again.';
+                errorEl.classList.add('show');
+            }
+        }
+
+        function showVerificationPrompt(email) {
+            const modal = document.createElement('div');
+            modal.className = 'auth-overlay show';
+            modal.id = 'verificationModal';
+            modal.innerHTML = `
+                <div class="auth-modal">
+                    <div class="auth-title">Verify Your Email</div>
+                    <div class="auth-subtitle">We've sent a verification code to:</div>
+                    <div style="color: var(--primary); font-weight: bold; margin-bottom: 20px;">${email}</div>
+                    <div class="auth-error" id="verifyError"></div>
+                    <input type="text" class="auth-input" id="verifyCode" placeholder="Enter 6-digit code" maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 24px;">
+                    <button class="auth-btn" onclick="submitVerification()">Verify Email</button>
+                    <div class="auth-switch">
+                        Didn't receive code? <a onclick="resendVerification()">Resend</a>
+                    </div>
+                    <button class="auth-btn secondary" onclick="closeVerificationPrompt()" style="margin-top: 15px;">Cancel</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            document.getElementById('verifyCode').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length === 6) {
+                    submitVerification();
+                }
+            });
+        }
+
+        async function submitVerification() {
+            const code = document.getElementById('verifyCode').value.trim();
+            const email = localStorage.getItem('pendingEmail');
+            const errorEl = document.getElementById('verifyError');
+
+            if (!code || code.length !== 6) {
+                errorEl.textContent = 'Please enter a valid 6-digit code';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/verify-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    authToken = data.token;
+                    currentUser = data.user;
+                    isGuest = false;
+                    // Sync local balance with server balance
+                    balance = currentUser.balance;
+                    unlockedGames = { ...currentUser.unlockedGames };
+                    closeVerificationPrompt();
+                    localStorage.removeItem('pendingEmail');
+                    updateAuthUI();
+                    startBalanceRefresh();
+                    showToast('Email verified! Welcome to Arcade Games!');
+                } else {
+                    errorEl.textContent = data.error || 'Invalid code';
+                    errorEl.classList.add('show');
+                }
+            } catch (e) {
+                errorEl.textContent = 'Connection error. Please try again.';
+                errorEl.classList.add('show');
+            }
+        }
+
+        async function resendVerification() {
+            const email = localStorage.getItem('pendingEmail');
+            if (!email) return;
+
+            try {
+                const response = await fetch('/api/resend-verification', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+                const errorEl = document.getElementById('verifyError');
+                
+                if (response.ok) {
+                    errorEl.textContent = 'Code resent! Check your email.';
+                    errorEl.style.color = 'var(--success)';
+                    errorEl.style.background = 'rgba(0,255,136,0.2)';
+                    errorEl.style.borderColor = 'var(--success)';
+                } else {
+                    errorEl.textContent = data.error || 'Failed to resend';
+                }
+                errorEl.classList.add('show');
+            } catch (e) {
+                console.error('Resend error:', e);
+            }
+        }
+
+        function closeVerificationPrompt() {
+            const modal = document.getElementById('verificationModal');
+            if (modal) modal.remove();
+        }
+
+        // Show verification code directly on screen (when email not configured)
+        function showVerificationCode(code, email) {
+            const modal = document.createElement('div');
+            modal.className = 'auth-overlay show';
+            modal.id = 'verificationModal';
+            modal.innerHTML = `
+                <div class="auth-modal" style="border-color: var(--success);">
+                    <div class="auth-title" style="color: var(--success);">Account Created!</div>
+                    <div class="auth-subtitle">Your verification code is:</div>
+                    <div style="background: var(--bg-dark); padding: 20px; border-radius: 12px; margin: 20px 0;">
+                        <div style="font-family: Orbitron, sans-serif; font-size: 42px; font-weight: 900; color: var(--success); letter-spacing: 8px;">${code}</div>
+                    </div>
+                    <div class="auth-subtitle">Enter this code below to verify your account</div>
+                    <div class="auth-error" id="verifyError"></div>
+                    <input type="text" class="auth-input" id="verifyCode" placeholder="Enter 6-digit code" maxlength="6" style="text-align: center; letter-spacing: 8px; font-size: 24px;">
+                    <button class="auth-btn" onclick="submitVerificationCode('${code}')">Verify Account</button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            document.getElementById('verifyCode').addEventListener('input', function(e) {
+                this.value = this.value.replace(/[^0-9]/g, '');
+                if (this.value.length === 6) {
+                    submitVerificationCode(code);
+                }
+            });
+        }
+
+        async function submitVerificationCode(expectedCode) {
+            const code = document.getElementById('verifyCode').value.trim();
+            const email = localStorage.getItem('pendingEmail');
+            const errorEl = document.getElementById('verifyError');
+
+            if (!code || code.length !== 6) {
+                errorEl.textContent = 'Please enter the 6-digit code';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            if (code !== expectedCode) {
+                errorEl.textContent = 'Incorrect code. Try again!';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            // Code matches - verify the account
+            try {
+                const response = await fetch('/api/verify-email', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code: expectedCode, email })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    authToken = data.token;
+                    currentUser = data.user;
+                    isGuest = false;
+                    // Sync local balance with server balance
+                    balance = currentUser.balance;
+                    unlockedGames = { ...currentUser.unlockedGames };
+                    closeVerificationPrompt();
+                    localStorage.removeItem('pendingEmail');
+                    updateAuthUI();
+                    startBalanceRefresh();
+                    showToast('Email verified! Welcome to Arcade Games!');
+                } else {
+                    errorEl.textContent = data.error || 'Invalid code';
+                    errorEl.classList.add('show');
+                }
+            } catch (e) {
+                errorEl.textContent = 'Connection error. Please try again.';
+                errorEl.classList.add('show');
+            }
+        }
+
+        function handleLogout() {
+            authToken = null;
+            currentUser = null;
+            isGuest = true;
+            localStorage.removeItem('token');
+            balance = 10;
+            unlockedGames = { plinko: false, blackjack: false };
+            stopBalanceRefresh();
+            updateAuthUI();
+            updateBalance();
+            showToast('Logged out successfully');
+        }
+
+        async function updateBalanceOnServer(newBalance, operation = 'set') {
+            if (!isGuest && authToken) {
+                try {
+                    const response = await fetch('/api/balance', {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({ amount: newBalance, operation })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        currentUser.balance = data.balance;
+                    }
+                } catch (e) {
+                    console.error('Balance update failed:', e);
+                }
+            }
+            updateAuthUI();
+        }
+
+        async function unlockGameOnServer(game) {
+            if (!isGuest && authToken) {
+                try {
+                    const response = await fetch('/api/unlock-game', {
+                        method: 'PUT',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({ game })
+                    });
+                    if (response.ok) {
+                        const data = await response.json();
+                        currentUser.balance = data.balance;
+                        currentUser.unlockedGames = data.unlockedGames;
+                        return true;
+                    }
+                } catch (e) {
+                    console.error('Unlock failed:', e);
+                }
+            }
+            return false;
+        }
+
+        let balance = 10;
+        let currentLevel = 1;
+        let currentXp = 0;
+        let xpForNextLevel = 100;
+        let unlockedGames = { plinko: false, blackjack: false };
+        let unlockedJobs = [];
+        let currentSkin = 'skin_default';
+        let currentTrail = 'trail_none';
+        let currentRisk = 'low', currentRows = 12, activeBalls = 0;
+        const MAX_BALLS = 10;
+
+        // Shop items
+        const shopItems = [
+            // Skins - Ball skins
+            { id: 'skin_default', name: 'Classic', icon: '⚫', type: 'skins', price: 0, desc: 'Classic black ball' },
+            { id: 'skin_red', name: 'Red', icon: '🔴', type: 'skins', price: 1000, desc: 'Red ball' },
+            { id: 'skin_blue', name: 'Blue', icon: '🔵', type: 'skins', price: 1000, desc: 'Blue ball' },
+            { id: 'skin_green', name: 'Green', icon: '🟢', type: 'skins', price: 1000, desc: 'Green ball' },
+            { id: 'skin_frog', name: 'Frog', icon: '🐸', type: 'skins', price: 1500, desc: 'Cute frog' },
+            { id: 'skin_rocket', name: 'Rocket', icon: '🚀', type: 'skins', price: 2500, desc: 'Rocket powered ball' },
+            { id: 'skin_star', name: 'Star', icon: '⭐', type: 'skins', price: 3000, desc: 'Shiny star ball' },
+            { id: 'skin_gem', name: 'Gem', icon: '💎', type: 'skins', price: 5000, desc: 'Diamond gem ball' },
+            { id: 'skin_fire', name: 'Fire', icon: '🔥', type: 'skins', price: 7500, desc: 'On fire!' },
+            { id: 'skin_rainbow', name: 'Rainbow', icon: '🌈', type: 'skins', price: 15000, desc: 'All the colors!' },
+            // Trails
+            { id: 'trail_none', name: 'None', icon: '🚫', type: 'trails', price: 0, desc: 'No trail' },
+            { id: 'trail_smoke', name: 'Smoke', icon: '💨', type: 'trails', price: 1000, desc: 'Smoke trail' },
+            { id: 'trail_fire', name: 'Fire', icon: '🔥', type: 'trails', price: 2500, desc: 'Fire trail' },
+            { id: 'trail_sparkle', name: 'Sparkle', icon: '✨', type: 'trails', price: 5000, desc: 'Sparkle trail' },
+            { id: 'trail_rainbow', name: 'Rainbow', icon: '🌈', type: 'trails', price: 10000, desc: 'Rainbow trail' },
+            { id: 'trail_gold', name: 'Gold', icon: '✨', type: 'trails', price: 25000, desc: 'Golden trail' }
+        ];
+
+        // Owned items (loaded from user data)
+        let ownedItems = ['skin_default', 'trail_none'];
+
+        const jobs = [
+            { id: 'burger', name: 'Burger Flipper', icon: '🍔', level: 1, pay: 2, time: 5, unlocked: true, type: 'timing' },
+            { id: 'cashier', name: 'Cashier', icon: '💰', level: 2, pay: 5, time: 5, unlocked: false, type: 'math' },
+            { id: 'mechanic', name: 'Mechanic', icon: '🔧', level: 3, pay: 12, time: 6, unlocked: false, type: 'memory' },
+            { id: 'chef', name: 'Chef', icon: '👨‍🍳', level: 4, pay: 25, time: 7, unlocked: false, type: 'catch' },
+            { id: 'pilot', name: 'Pilot', icon: '✈️', level: 5, pay: 50, time: 8, unlocked: false, type: 'dodge' },
+            { id: 'surgeon', name: 'Surgeon', icon: '💉', level: 6, pay: 100, time: 10, unlocked: false, type: 'precision' },
+            { id: 'ceo', name: 'CEO', icon: '💼', level: 7, pay: 250, time: 12, unlocked: false, type: 'stock' },
+            { id: 'crypto', name: 'Crypto Trader', icon: '📈', level: 8, pay: 500, time: 15, unlocked: false, type: 'crypto' }
+        ];
+
+        const multipliers = {
+            low: [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3],
+            medium: [0.2, 0.5, 0.75, 1, 1.5, 2.5, 4, 6],
+            high: [0.1, 0.2, 0.5, 1, 2, 5, 10, 20]
+        };
+
+        let bjDeck = [], bjPlayerHand = [], bjDealerHand = [], bjBet = 5, bjGameActive = false, bjDealing = false;
+        let jobGameActive = false, jobTimeLeft = 0, jobPay = 0, jobTimerInterval = null, currentJobId = null, minigameState = {};
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await checkAuth();
+            updateBalance();
+            renderJobs();
+            setTimeout(() => { initPlinkoBoard(); updateMaxWin(); }, 100);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.code === 'Space' && jobGameActive && minigameState.type === 'timing') {
+                    e.preventDefault();
+                    burgerFlip();
+                }
+            });
+        });
+
+        function updateBalance() {
+            // Try to update balance display if element exists
+            const balanceEl = document.getElementById('balance');
+            if (balanceEl) {
+                balanceEl.textContent = balance.toFixed(2);
+            }
+            // Also update header balance if logged in
+            const headerBalanceEl = document.getElementById('headerBalance');
+            if (headerBalanceEl) {
+                headerBalanceEl.textContent = '$' + balance.toFixed(2);
+            }
+            // Also update job modal balance if visible
+            updateJobBalanceDisplay();
+            updateUnlockButtons();
+        }
+
+        function updateUnlockButtons() {
+            // Games are only available for signed-in users
+            if (isGuest || !currentUser) {
+                // Disable all game buttons for guests
+                const plinkoBtn = document.getElementById('unlockPlinkoBtn');
+                const blackjackBtn = document.getElementById('unlockBlackjackBtn');
+                if (plinkoBtn) {
+                    plinkoBtn.disabled = true;
+                    plinkoBtn.textContent = 'Sign in';
+                    document.getElementById('plinkoCard').classList.add('locked');
+                }
+                if (blackjackBtn) {
+                    blackjackBtn.disabled = true;
+                    blackjackBtn.textContent = 'Sign in';
+                    document.getElementById('blackjackCard').classList.add('locked');
+                }
+                return;
+            }
+            
+            // Use local balance for checking unlock status - don't overwrite it!
+            const currentBalance = currentUser.balance;
+            unlockedGames = { ...currentUser.unlockedGames };
+            
+            const plinkoBtn = document.getElementById('unlockPlinkoBtn');
+            const blackjackBtn = document.getElementById('unlockBlackjackBtn');
+            
+            if (plinkoBtn) {
+                if (unlockedGames.plinko) {
+                    plinkoBtn.disabled = false;
+                    plinkoBtn.textContent = 'PLAY';
+                    plinkoBtn.onclick = showPlinko;
+                    document.getElementById('plinkoCard').classList.remove('locked');
+                } else {
+                    plinkoBtn.disabled = currentBalance < 50;
+                }
+            }
+            if (blackjackBtn) {
+                if (unlockedGames.blackjack) {
+                    blackjackBtn.disabled = false;
+                    blackjackBtn.textContent = 'PLAY';
+                    blackjackBtn.onclick = showBlackjack;
+                    document.getElementById('blackjackCard').classList.remove('locked');
+                } else {
+                    blackjackBtn.disabled = currentBalance < 100;
+                }
+            }
+        }
+
+        async function unlockPlinko() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to unlock games!');
+                showAuthModal('login');
+                return;
+            }
+            
+            if (unlockedGames.plinko) { showPlinko(); return; }
+            
+            const success = await unlockGameOnServer('plinko');
+            if (success) {
+                updateAuthUI();
+                showPlinko();
+                return;
+            }
+            
+            if (balance < 100) { showToast('Need $100 to unlock!'); return; }
+            balance -= 100;
+            unlockedGames.plinko = true;
+            updateBalance();
+            showPlinko();
+        }
+
+        async function unlockBlackjack() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to unlock games!');
+                showAuthModal('login');
+                return;
+            }
+            
+            if (unlockedGames.blackjack) { showBlackjack(); return; }
+            
+            const success = await unlockGameOnServer('blackjack');
+            if (success) {
+                updateAuthUI();
+                showBlackjack();
+                return;
+            }
+            
+            if (balance < 100) { showToast('Need $100 to unlock!'); return; }
+            balance -= 100;
+            unlockedGames.blackjack = true;
+            updateBalance();
+            showBlackjack();
+        }
+
+        function showMenu() { hideAllSections(); document.getElementById('mainMenu').style.display = 'flex'; }
+        function showJobs() { hideAllSections(); document.getElementById('jobsSection').classList.add('show'); }
+        
+        function showShop() {
+            hideAllSections();
+            document.getElementById('shopSection').classList.add('show');
+            renderShop('all');
+        }
+        
+        function filterShop(filter) {
+            // Update filter buttons
+            document.querySelectorAll('.shop-filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderShop(filter);
+        }
+        
+        function renderShop(filter) {
+            const grid = document.getElementById('shopGrid');
+            const filteredItems = filter === 'all' ? shopItems : shopItems.filter(item => item.type === filter);
+            
+            grid.innerHTML = filteredItems.map(item => {
+                const isOwned = ownedItems.includes(item.id);
+                const canAfford = balance >= item.price;
+                const isEquipped = (item.type === 'skins' && currentSkin === item.id) || 
+                                  (item.type === 'trails' && currentTrail === item.id);
+                
+                return `
+                <div class="shop-item ${isOwned ? 'owned' : ''}">
+                    <div class="shop-item-icon">${item.icon}</div>
+                    <div class="shop-item-name">${item.name}</div>
+                    <div class="shop-item-desc">${item.desc}</div>
+                    <div class="shop-item-price">${item.price === 0 ? 'FREE' : '$' + item.price.toLocaleString()}</div>
+                    ${isOwned ? 
+                        `<button class="shop-buy-btn ${isEquipped ? 'equipped' : ''}" onclick="equipItem('${item.id}')">${isEquipped ? 'EQUIPPED' : 'EQUIP'}</button>` :
+                        `<button class="shop-buy-btn" onclick="buyItem('${item.id}')" ${!canAfford ? 'disabled' : ''}>${canAfford ? 'BUY' : 'Need $' + item.price.toLocaleString()}</button>`
+                    }
+                </div>
+            `}).join('');
+        }
+        
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (!item) return;
+            
+            if (ownedItems.includes(itemId)) {
+                showToast('You already own this item!');
+                return;
+            }
+            
+            if (balance < item.price) {
+                showToast('Not enough money!');
+                return;
+            }
+            
+            balance -= item.price;
+            ownedItems.push(itemId);
+            
+            // Update server
+            if (!isGuest && authToken) {
+                fetch('/api/balance', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ amount: balance, operation: 'set' })
+                });
+                
+                // Save owned items
+                fetch('/api/owned-items', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ ownedItems: ownedItems })
+                });
+            }
+            
+            updateBalance();
+            showToast(`Bought ${item.name} for $${item.price}!`);
+            renderShop(document.querySelector('.shop-filter-btn.active')?.textContent.toLowerCase() || 'all');
+        }
+        
+        function equipItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            if (!item || !ownedItems.includes(itemId)) {
+                showToast('You need to buy this item first!');
+                return;
+            }
+            
+            if (item.type === 'skins') {
+                currentSkin = itemId;
+            } else if (item.type === 'trails') {
+                currentTrail = itemId;
+            }
+            
+            // Save equipped items to server
+            if (!isGuest && authToken) {
+                fetch('/api/equipped-items', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({ currentSkin: currentSkin, currentTrail: currentTrail })
+                });
+            }
+            
+            showToast(`Equipped ${item.name}!`);
+            renderShop(document.querySelector('.shop-filter-btn.active')?.textContent.toLowerCase() || 'all');
+        }
+        
+        function showPlinko() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to play!');
+                showAuthModal('login');
+                return;
+            }
+            if (!unlockedGames.plinko) { showToast('Unlock Plinko first! ($100)'); return; }
+            hideAllSections();
+            document.getElementById('plinkoSection').classList.add('show');
+            setTimeout(() => { initPlinkoBoard(); updateMaxWin(); }, 50);
+        }
+        function showBlackjack() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to play!');
+                showAuthModal('login');
+                return;
+            }
+            if (!unlockedGames.blackjack) { showToast('Unlock Blackjack first! ($100)'); return; }
+            hideAllSections();
+            document.getElementById('blackjackSection').classList.add('show');
+        }
+        function hideAllSections() {
+            document.getElementById('mainMenu').style.display = 'none';
+            document.getElementById('jobsSection').classList.remove('show');
+            document.getElementById('shopSection').classList.remove('show');
+            document.getElementById('plinkoSection').classList.remove('show');
+            document.getElementById('blackjackSection').classList.remove('show');
+        }
+
+        function renderJobs() {
+            // Jobs are only available for signed-in users
+            if (isGuest || !currentUser) {
+                document.getElementById('jobsGrid').innerHTML = '<div style="text-align:center;grid-column:1/-1;padding:40px;"><div style="font-size:48px;margin-bottom:20px">🔒</div><div style="font-family:Orbitron,sans-serif;font-size:24px;color:var(--text-secondary)">Sign in to access jobs</div></div>';
+                return;
+            }
+            
+            // Get player's level from currentUser (defaults to 1 if not set)
+            const playerLevel = currentUser.level || 1;
+            
+            const grid = document.getElementById('jobsGrid');
+            grid.innerHTML = jobs.map(job => {
+                const isUnlocked = playerLevel >= job.level;
+                return `
+                <div class="job-card ${isUnlocked ? '' : 'locked'}">
+                    <div class="job-level">Level ${job.level} ${!isUnlocked ? '(Need Lv.' + job.level + ')' : ''}</div>
+                    <div class="job-icon">${job.icon}</div>
+                    <div class="job-name">${job.name}</div>
+                    <div class="job-stats">
+                        <div class="job-stat"><div class="job-stat-label">Pay</div><div class="job-stat-value">$${job.pay}</div></div>
+                        <div class="job-stat"><div class="job-stat-label">Time</div><div class="job-stat-value">${job.time}s</div></div>
+                        <div class="job-stat"><div class="job-stat-label">Type</div><div class="job-stat-value">${job.type}</div></div>
+                    </div>
+                    <button class="start-job-btn" onclick="startJob('${job.id}')" ${isUnlocked ? '' : 'disabled'}>${isUnlocked ? 'START JOB' : 'LOCKED'}</button>
+                </div>
+            `}).join('');
+        }
+
+        function startJob(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            const playerLevel = currentUser ? (currentUser.level || 1) : 1;
+            const isUnlocked = playerLevel >= job.level;
+            
+            if (!job || !isUnlocked) { showToast('Job locked! Reach level ' + job.level); return; }
+            if (jobGameActive) { showToast('Finish current job first!'); return; }
+            
+            // Reset state first
+            currentJobId = jobId;
+            jobGameActive = true;
+            jobTimeLeft = job.time;
+            jobPay = job.pay;
+            
+            // Reset minigame state completely
+            minigameState = { type: job.type, completed: false };
+            
+            // Update modal content first (while hidden)
+            document.getElementById('jobGameTitle').textContent = job.name;
+            document.getElementById('jobResultText').textContent = '';
+            updateJobBalanceDisplay();
+            updateBalance(); // Also update main header balance
+            
+            // Show modal
+            document.getElementById('jobGameModal').classList.add('show');
+            
+            // Clear any existing intervals
+            if (jobTimerInterval) clearInterval(jobTimerInterval);
+            
+            // Initialize minigame
+            initMinigame(job.type);
+            updateJobTimer();
+            
+            // Start timer
+            jobTimerInterval = setInterval(() => {
+                jobTimeLeft -= 0.1;
+                updateJobTimer();
+                if (jobTimeLeft <= 0) endJob(false);
+            }, 100);
+        }
+
+        function updateJobBalanceDisplay() {
+            const balanceDisplay = document.getElementById('jobBalanceDisplay');
+            if (balanceDisplay) {
+                balanceDisplay.textContent = 'Balance: $' + balance.toFixed(2);
+            }
+        }
+
+        function updateJobTimer() {
+            const fill = (jobTimeLeft / jobs.find(j => j.id === currentJobId).time) * 100;
+            document.getElementById('jobTimerFill').style.width = Math.max(0, Math.min(100, fill)) + '%';
+            document.getElementById('jobTimerText').textContent = jobTimeLeft.toFixed(1) + 's';
+        }
+
+        function initMinigame(type) {
+            const area = document.getElementById('minigameArea');
+            area.innerHTML = '';
+            minigameState = { type: type, completed: false };
+            switch (type) {
+                case 'timing': initBurgerGame(area); break;
+                case 'math': initCashierGame(area); break;
+                case 'memory': initMechanicGame(area); break;
+                case 'catch': initChefGame(area); break;
+                case 'dodge': initPilotGame(area); break;
+                case 'precision': initSurgeonGame(area); break;
+                case 'stock': initCEOGame(area); break;
+                case 'crypto': initCryptoGame(area); break;
+            }
+        }
+
+        function initBurgerGame(area) {
+            area.innerHTML = '<div style="font-size:60px;margin-bottom:20px">🍔</div><div class="game-display" id="burgerDisplay">WAIT...</div><button class="game-btn" id="burgerBtn" onclick="burgerFlip()" disabled>FLIP!</button>';
+            minigameState.phase = 'waiting';
+            minigameState.flips = 0;
+            minigameState.target = 2;
+            minigameState.completed = false;
+            setTimeout(() => {
+                minigameState.phase = 'ready';
+                document.getElementById('burgerDisplay').textContent = 'FLIP NOW! (2x)';
+                document.getElementById('burgerBtn').disabled = false;
+            }, 1500);
+        }
+
+        function burgerFlip() {
+            // Only allow flip if game is active and not completed
+            if (minigameState.phase !== 'ready' || minigameState.completed || !jobGameActive) return;
+            
+            minigameState.flips++;
+            document.getElementById('burgerDisplay').textContent = `FLIPS: ${minigameState.flips}/${minigameState.target}`;
+            
+            if (minigameState.flips >= minigameState.target) {
+                minigameState.completed = true;
+                minigameState.phase = 'done'; // Mark as done
+                endJob(true);
+            }
+        }
+
+        function initCashierGame(area) {
+            const price = Math.floor(Math.random() * 20) + 5;
+            const paid = Math.floor(Math.random() * 3 + 1) * 10;
+            const change = paid - price;
+            minigameState.answer = change;
+            minigameState.options = [change, change + 1, change - 1, change + 5].sort(() => Math.random() - 0.5);
+            area.innerHTML = `<div class="game-display">Price: $${price}<br>Paid: $${paid}</div><div class="game-grid" style="grid-template-columns:repeat(2,1fr)">${minigameState.options.map((opt, i) => `<button class="game-cell" onclick="cashierAnswer(${opt})">$${opt}</button>`).join('')}</div>`;
+        }
+
+        function cashierAnswer(amount) {
+            if (amount === minigameState.answer) {
+                minigameState.completed = true;
+                endJob(true);
+            } else {
+                endJob(false);
+            }
+        }
+
+        function initMechanicGame(area) {
+            area.innerHTML = '<div class="game-display">Watch the pattern...</div><div class="game-grid" id="mechanicGrid"></div>';
+            const parts = ['🔧', '⚙️', '🔩', '🛠️', '⚡', '🔋'];
+            minigameState.sequence = [];
+            minigameState.playerStep = 0;
+            for (let i = 0; i < 3; i++) minigameState.sequence.push(Math.floor(Math.random() * 6));
+            const grid = document.getElementById('mechanicGrid');
+            grid.innerHTML = parts.map((p, i) => `<div class="game-cell" id="part${i}" onclick="mechanicClick(${i})">${p}</div>`).join('');
+            setTimeout(() => playMechanicSequence(), 1000);
+        }
+
+        function playMechanicSequence() {
+            let i = 0;
+            const interval = setInterval(() => {
+                if (i >= minigameState.sequence.length) {
+                    clearInterval(interval);
+                    document.querySelector('.game-display').textContent = 'Your turn!';
+                    return;
+                }
+                const idx = minigameState.sequence[i];
+                const cell = document.getElementById(`part${idx}`);
+                cell.classList.add('lit');
+                setTimeout(() => cell.classList.remove('lit'), 300);
+                i++;
+            }, 600);
+        }
+
+        function mechanicClick(idx) {
+            if (minigameState.playerStep >= minigameState.sequence.length) return;
+            if (idx === minigameState.sequence[minigameState.playerStep]) {
+                minigameState.playerStep++;
+                if (minigameState.playerStep >= minigameState.sequence.length) {
+                    minigameState.completed = true;
+                    endJob(true);
+                }
+            } else {
+                document.getElementById(`part${idx}`).classList.add('wrong');
+                endJob(false);
+            }
+        }
+
+        function initChefGame(area) {
+            area.innerHTML = '<div class="catch-game" id="catchArea"><div class="catch-basket" id="basket">🥣</div></div><div style="margin-top:10px">Use ← → arrows or buttons</div><div class="chef-controls"><button class="game-btn" onmousedown="moveBasket(-1)" onmouseup="stopBasket()" ontouchstart="moveBasket(-1)" ontouchend="stopBasket()">←</button><button class="game-btn" onmousedown="moveBasket(1)" onmouseup="stopBasket()" ontouchstart="moveBasket(1)" ontouchend="stopBasket()">→</button></div>';
+            minigameState.caught = 0;
+            minigameState.target = 5;
+            minigameState.basketPos = 50;
+            minigameState.items = [];
+            spawnIngredient();
+        }
+
+        function moveBasket(dir) { minigameState.basketDir = dir; }
+        function stopBasket() { minigameState.basketDir = 0; }
+
+        function spawnIngredient() {
+            if (!jobGameActive) return;
+            const area = document.getElementById('catchArea');
+            const item = document.createElement('div');
+            item.className = 'catch-item';
+            item.textContent = ['🍅', '🥬', '🧅', '🥕', '🧀'][Math.floor(Math.random() * 5)];
+            item.style.left = Math.random() * 80 + 10 + '%';
+            item.style.top = '0px';
+            area.appendChild(item);
+            let y = 0;
+            const fall = setInterval(() => {
+                y += 3;
+                item.style.top = y + 'px';
+                const basket = document.getElementById('basket');
+                const rect = item.getBoundingClientRect();
+                const bRect = basket.getBoundingClientRect();
+                if (rect.bottom > bRect.top && rect.left < bRect.right && rect.right > bRect.left) {
+                    clearInterval(fall);
+                    item.remove();
+                    minigameState.caught++;
+                    if (minigameState.caught >= minigameState.target) {
+                        minigameState.completed = true;
+                        endJob(true);
+                    } else {
+                        spawnIngredient();
+                    }
+                    return;
+                }
+                if (y > 250) {
+                    clearInterval(fall);
+                    item.remove();
+                    endJob(false);
+                }
+            }, 30);
+        }
+
+        function initPilotGame(area) {
+            area.innerHTML = '<div class="dodge-game" id="dodgeArea"><div class="dodge-player" id="plane" style="top:50%">✈️</div></div><div class="pilot-controls"><button class="pilot-btn" onclick="movePlane(-20)">UP</button><button class="pilot-btn" onclick="movePlane(20)">DOWN</button></div>';
+            minigameState.planeY = 50;
+            minigameState.obstacles = 0;
+            minigameState.target = 10;
+            spawnObstacle();
+        }
+
+        function movePlane(delta) {
+            minigameState.planeY = Math.max(10, Math.min(90, minigameState.planeY + delta));
+            document.getElementById('plane').style.top = minigameState.planeY + '%';
+        }
+
+        function spawnObstacle() {
+            if (!jobGameActive) return;
+            const area = document.getElementById('dodgeArea');
+            const obs = document.createElement('div');
+            obs.className = 'dodge-obstacle';
+            obs.textContent = ['☁️', '🐦', '🎈', '⚡'][Math.floor(Math.random() * 4)];
+            obs.style.top = Math.random() * 80 + 10 + '%';
+            area.appendChild(obs);
+            let x = 100;
+            const move = setInterval(() => {
+                x -= 2;
+                obs.style.left = x + '%';
+                const pRect = document.getElementById('plane').getBoundingClientRect();
+                const oRect = obs.getBoundingClientRect();
+                if (pRect.left < oRect.right && pRect.right > oRect.left && pRect.top < oRect.bottom && pRect.bottom > oRect.top) {
+                    clearInterval(move);
+                    endJob(false);
+                    return;
+                }
+                if (x < -50) {
+                    clearInterval(move);
+                    obs.remove();
+                    minigameState.obstacles++;
+                    if (minigameState.obstacles >= minigameState.target) {
+                        minigameState.completed = true;
+                        endJob(true);
+                    } else {
+                        setTimeout(spawnObstacle, 500);
+                    }
+                }
+            }, 30);
+        }
+
+        function initSurgeonGame(area) {
+            area.innerHTML = '<div class="surgeon-game" id="surgeryArea"><div class="surgeon-body">🫀</div></div>';
+            minigameState.cuts = 0;
+            minigameState.target = 3;
+            spawnSurgeryTarget();
+        }
+
+        function spawnSurgeryTarget() {
+            if (!jobGameActive || minigameState.cuts >= minigameState.target) return;
+            const area = document.getElementById('surgeryArea');
+            const target = document.createElement('div');
+            target.className = 'surgeon-target';
+            target.style.left = Math.random() * 70 + 15 + '%';
+            target.style.top = Math.random() * 70 + 15 + '%';
+            target.onclick = () => {
+                target.remove();
+                minigameState.cuts++;
+                if (minigameState.cuts >= minigameState.target) {
+                    minigameState.completed = true;
+                    endJob(true);
+                } else {
+                    spawnSurgeryTarget();
+                }
+            };
+            area.appendChild(target);
+            setTimeout(() => {
+                if (target.parentNode) {
+                    target.remove();
+                    endJob(false);
+                }
+            }, 2000);
+        }
+
+        function initCEOGame(area) {
+            const startPrice = 100;
+            minigameState.price = startPrice;
+            minigameState.bought = false;
+            minigameState.targetPrice = startPrice * 1.5;
+            area.innerHTML = `<div class="ceo-game"><div class="ceo-stock-price" id="stockPrice">$${startPrice}</div><div class="ceo-chart"><div class="ceo-chart-line" id="chartLine"></div></div><div class="ceo-buttons"><button class="ceo-btn buy" onclick="buyStock()">BUY</button><button class="ceo-btn sell" onclick="sellStock()" disabled id="sellBtn">SELL</button></div></div>`;
+            updateStockPrice();
+        }
+
+        function updateStockPrice() {
+            if (!jobGameActive || minigameState.completed) return;
+            const change = (Math.random() - 0.4) * 10;
+            minigameState.price += change;
+            document.getElementById('stockPrice').textContent = '$' + minigameState.price.toFixed(2);
+            document.getElementById('chartLine').style.height = Math.min(100, Math.max(0, minigameState.price / 2)) + '%';
+            if (minigameState.bought && minigameState.price >= minigameState.targetPrice) {
+                document.getElementById('sellBtn').disabled = false;
+            }
+            setTimeout(updateStockPrice, 500);
+        }
+
+        function buyStock() {
+            if (minigameState.bought) return;
+            minigameState.bought = true;
+            minigameState.buyPrice = minigameState.price;
+            document.querySelector('.buy').disabled = true;
+            document.getElementById('sellBtn').disabled = false;
+        }
+
+        function sellStock() {
+            if (!minigameState.bought) return;
+            if (minigameState.price > minigameState.buyPrice) {
+                minigameState.completed = true;
+                endJob(true);
+            } else {
+                endJob(false);
+            }
+        }
+
+        function initCryptoGame(area) {
+            minigameState.cryptoPrice = 50000;
+            minigameState.cryptoBought = false;
+            area.innerHTML = `<div class="crypto-game"><div class="crypto-price" id="cryptoPrice">$${minigameState.cryptoPrice.toLocaleString()}</div><div class="crypto-graph" id="cryptoGraph"></div><div class="ceo-buttons"><button class="ceo-btn buy" onclick="buyCrypto()">BUY</button><button class="ceo-btn sell" onclick="sellCrypto()" disabled id="cryptoSellBtn">SELL</button></div></div>`;
+            updateCryptoPrice();
+        }
+
+        function updateCryptoPrice() {
+            if (!jobGameActive || minigameState.completed) return;
+            const change = (Math.random() - 0.5) * 1000;
+            minigameState.cryptoPrice += change;
+            const priceEl = document.getElementById('cryptoPrice');
+            priceEl.textContent = '$' + Math.floor(minigameState.cryptoPrice).toLocaleString();
+            priceEl.className = 'crypto-price ' + (change > 0 ? 'up' : 'down');
+            const graph = document.getElementById('cryptoGraph');
+            const dot = document.createElement('div');
+            dot.style.position = 'absolute';
+            dot.style.right = '0';
+            dot.style.bottom = Math.min(100, Math.max(0, minigameState.cryptoPrice / 1000)) + '%';
+            dot.style.width = '2px';
+            dot.style.height = '2px';
+            dot.style.background = change > 0 ? 'var(--success)' : 'var(--danger)';
+            graph.appendChild(dot);
+            if (graph.children.length > 50) graph.removeChild(graph.firstChild);
+            setTimeout(updateCryptoPrice, 200);
+        }
+
+        function buyCrypto() {
+            if (minigameState.cryptoBought) return;
+            minigameState.cryptoBought = true;
+            minigameState.cryptoBuyPrice = minigameState.cryptoPrice;
+            document.querySelector('.buy').disabled = true;
+            document.getElementById('cryptoSellBtn').disabled = false;
+        }
+
+        function sellCrypto() {
+            if (!minigameState.cryptoBought) return;
+            if (minigameState.cryptoPrice > minigameState.cryptoBuyPrice * 1.05) {
+                minigameState.completed = true;
+                endJob(true);
+            } else {
+                endJob(false);
+            }
+        }
+
+        function endJob(success) {
+            // Clear interval FIRST to stop any pending callbacks
+            if (jobTimerInterval) {
+                clearInterval(jobTimerInterval);
+                jobTimerInterval = null;
+            }
+            
+            jobGameActive = false;
+            const resultText = document.getElementById('jobResultText');
+            const modal = document.getElementById('jobGameModal');
+            const autoReplay = document.getElementById('autoReplayCheck').checked;
+            const jobIdToReplay = currentJobId;
+            const currentJobPay = jobPay;
+            const currentBalance = balance;
+
+            if (success) {
+                balance += currentJobPay;
+                resultText.textContent = `+$${currentJobPay}!`;
+                resultText.className = 'job-result-text success';
+                showToast(`Job complete! +$${currentJobPay}`);
+                updateJobBalanceDisplay();
+
+                // Get XP amount (same as job pay)
+                const xpAmount = currentJobPay;
+                
+                // Show XP popup for everyone (including guests)
+                showXpPopup(xpAmount);
+                
+                // Add XP to player's level (only for logged in users)
+                if (!isGuest && authToken) {
+                    console.log('Saving to server - Balance:', balance, 'XP:', xpAmount, 'Token exists:', !!authToken);
+                    
+                    // Update balance and XP together
+                    fetch('/api/balance', {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${authToken}`
+                        },
+                        body: JSON.stringify({ amount: balance, operation: 'set' })
+                    })
+                    .then(res => {
+                        if (!res.ok) {
+                            return res.json().then(err => { throw new Error(err.error || 'Balance update failed'); });
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        console.log('Balance saved:', data);
+                        currentUser.balance = data.balance;
+                        return fetch('/api/add-xp', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${authToken}`
+                            },
+                            body: JSON.stringify({ xp: xpAmount })
+                        });
+                    })
+                    .then(res => {
+                        if (!res.ok) {
+                            return res.json().then(err => { throw new Error(err.error || 'XP update failed'); });
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        console.log('XP saved:', data);
+                        if (data.level > (currentUser.level || 1)) {
+                            showToast(`🎉 LEVEL UP! You are now level ${data.level}!`);
+                        }
+                        currentUser.level = data.level;
+                        currentUser.xp = data.xp;
+                        updateAuthUI();
+                    })
+                    .catch(e => {
+                        console.error('Save failed:', e.message);
+                        showToast('Error: ' + e.message);
+                    });
+                } else {
+                    console.log('Not logged in - only updating local balance');
+                }
+
+                updateBalance();
+            } else {
+                resultText.textContent = 'FAILED!';
+                resultText.className = 'job-result-text fail';
+                showToast('Job failed!');
+            }
+
+            // Auto-replay - wait 1 second then restart seamlessly WITHOUT closing modal
+            if (autoReplay && jobIdToReplay) {
+                setTimeout(() => {
+                    if (!jobGameActive) {
+                        startJob(jobIdToReplay);
+                    }
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    modal.classList.remove('show');
+                }, 1500);
+            }
+        }
+
+        function closeJobGame() {
+            document.getElementById('autoReplayCheck').checked = false;
+            document.getElementById('jobGameModal').classList.remove('show');
+            jobGameActive = false;
+            clearInterval(jobTimerInterval);
+            currentJobId = null;
+        }
+
+        function initPlinkoBoard() {
+            const board = document.getElementById('plinkoBoard');
+            const slotsContainer = document.getElementById('slotsContainer');
+            board.querySelectorAll('.peg').forEach(p => p.remove());
+            slotsContainer.innerHTML = '';
+<<<<<<< HEAD
+            
+            const isMobile = window.innerWidth <= 768;
+            // Set 9 rows on mobile, default on desktop
+            const rows = isMobile ? 9 : currentRows;
+            const startY = isMobile ? 30 : 80;
+            const pegSpacingX = isMobile ? 25 : 60;
+            const pegSpacingY = isMobile ? 25 : 50;
+            
+            for (let row = 0; row < rows; row++) {
+=======
+            const startY = 80, pegSpacingX = 60, pegSpacingY = 50;
+            for (let row = 0; row < currentRows; row++) {
+>>>>>>> bd538903270de3035f6b409ee70671dd19850d72
+                const pegsInRow = row + 3;
+                const rowWidth = (pegsInRow - 1) * pegSpacingX;
+                const startX = (board.offsetWidth - rowWidth) / 2;
+                for (let col = 0; col < pegsInRow; col++) {
+                    const peg = document.createElement('div');
+                    peg.className = 'peg';
+                    peg.style.left = (startX + col * pegSpacingX) + 'px';
+                    peg.style.top = (startY + row * pegSpacingY) + 'px';
+                    board.appendChild(peg);
+                }
+            }
+<<<<<<< HEAD
+            const slotCount = rows + 2;
+=======
+            const slotCount = currentRows + 2;
+>>>>>>> bd538903270de3035f6b409ee70671dd19850d72
+            const centerIndex = Math.floor(slotCount / 2);
+            const baseMults = multipliers[currentRisk];
+            for (let i = 0; i < slotCount; i++) {
+                const slot = document.createElement('div');
+                slot.className = 'slot';
+                const distFromCenter = Math.abs(i - centerIndex);
+                const mult = baseMults[Math.min(distFromCenter, baseMults.length - 1)];
+                slot.innerHTML = `<span class="multiplier">${mult}x</span>`;
+                slot.dataset.multiplier = mult;
+                slotsContainer.appendChild(slot);
+            }
+        }
+
+        function setRisk(risk) {
+            currentRisk = risk;
+            document.querySelectorAll('.risk-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.risk-btn.${risk}`).classList.add('active');
+            initPlinkoBoard();
+            updateMaxWin();
+        }
+
+        function adjustRows(delta) {
+            currentRows = Math.max(8, Math.min(16, currentRows + delta));
+            document.getElementById('rowsValue').textContent = currentRows;
+            initPlinkoBoard();
+            updateMaxWin();
+        }
+
+        function adjustBet(delta) {
+            const input = document.getElementById('betInput');
+            let val = parseFloat(input.value) || 0;
+            val = Math.max(0.10, val + delta);
+            input.value = val.toFixed(2);
+            updateMaxWin();
+        }
+
+        function setBet(amount) {
+            document.getElementById('betInput').value = amount;
+            updateMaxWin();
+        }
+
+        function updateMaxWin() {
+            const bet = parseFloat(document.getElementById('betInput').value) || 0;
+            const maxMult = Math.max(...multipliers[currentRisk]);
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+        
+        function showXpPopup(xpAmount) {
+            const container = document.getElementById('toastContainer');
+            const xpToast = document.createElement('div');
+            xpToast.style.cssText = 'background: linear-gradient(135deg, #9b59b6, #8e44ad); color: white; padding: 12px 24px; border-radius: 8px; font-family: Orbitron, sans-serif; font-size: 16px; font-weight: 600; opacity: 0; transform: translateY(-20px); transition: all 0.3s ease;';
+            xpToast.textContent = `+${xpAmount} XP!`;
+            container.appendChild(xpToast);
+            setTimeout(() => xpToast.style.opacity = '1', 10);
+            setTimeout(() => xpToast.style.transform = 'translateY(0)', 20);
+            setTimeout(() => {
+                xpToast.style.opacity = '0';
+                xpToast.style.transform = 'translateY(-20px)';
+                setTimeout(() => xpToast.remove(), 300);
+            }, 2000);
+        }
+
+        function dropBall() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to play!');
+                return;
+            }
+            
+            const bet = parseFloat(document.getElementById('betInput').value) || 0;
+            if (bet < 0.1) { showToast('Minimum bet is $0.10'); return; }
+            if (bet > balance) { showToast('Not enough balance!'); return; }
+            if (activeBalls >= MAX_BALLS) { showToast('Max 10 balls at once!'); return; }
+            
+            gameInProgress = true; // Mark game as in progress
+            activeBalls++;
+            balance -= bet;
+            updateBalance();
+            updateBalanceOnServer(balance, 'set');
+            
+            const board = document.getElementById('plinkoBoard');
+            const ball = document.createElement('div');
+            const skin = shopItems.find(s => s.id === currentSkin) || shopItems[0];
+            const trail = shopItems.find(t => t.id === currentTrail) || shopItems.find(t => t.id === 'trail_none');
+            ball.className = 'ball dropping';
+            ball.textContent = skin.icon;
+            const centerX = board.offsetWidth / 2;
+            const startX = centerX - 11 + (Math.random() - 0.5) * 40;
+            ball.style.left = startX + 'px';
+            ball.style.top = '10px';
+            board.appendChild(ball);
+            
+            // Trail management
+            const trails = [];
+            let trailCounter = 0;
+            const ballRadius = 11, pegRadius = 5, gravity = 0.4, bounceRestitution = 0.6, friction = 0.998;
+            let pos = { x: startX, y: 10 }, vel = { x: (Math.random() - 0.5) * 2, y: 0 };
+            const pegs = Array.from(board.querySelectorAll('.peg'));
+            const pegCooldowns = new Array(pegs.length).fill(0);
+            const dropInterval = setInterval(() => {
+                vel.y += gravity;
+                vel.x *= friction;
+                vel.y *= friction;
+                pos.x += vel.x;
+                pos.y += vel.y;
+                
+                // Create trail element (behind ball - z-index: 1)
+                if (currentTrail !== 'trail_none' && trailCounter % 3 === 0) {
+                    const trailEl = document.createElement('div');
+                    trailEl.className = 'ball-trail';
+                    trailEl.textContent = trail.icon;
+                    trailEl.style.left = (pos.x + 5) + 'px';
+                    trailEl.style.top = (pos.y + 5) + 'px';
+                    trailEl.style.zIndex = '1';
+                    trailEl.style.opacity = '0.6';
+                    trailEl.style.position = 'absolute';
+                    trailEl.style.fontSize = '16px';
+                    board.appendChild(trailEl);
+                    trails.push(trailEl);
+                    
+                    // Fade out and remove old trails
+                    setTimeout(() => {
+                        if (trailEl.parentNode) {
+                            trailEl.style.transition = 'opacity 0.3s';
+                            trailEl.style.opacity = '0';
+                            setTimeout(() => trailEl.remove(), 300);
+                        }
+                    }, 300);
+                }
+                trailCounter++;
+                
+                for (let i = 0; i < pegCooldowns.length; i++) if (pegCooldowns[i] > 0) pegCooldowns[i]--;
+                for (let i = 0; i < pegs.length; i++) {
+                    if (pegCooldowns[i] > 0) continue;
+                    const peg = pegs[i];
+                    const pegX = parseFloat(peg.style.left) + pegRadius;
+                    const pegY = parseFloat(peg.style.top) + pegRadius;
+                    const ballCenterX = pos.x + ballRadius;
+                    const ballCenterY = pos.y + ballRadius;
+                    const dx = ballCenterX - pegX;
+                    const dy = ballCenterY - pegY;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    const minDist = ballRadius + pegRadius;
+                    if (dist < minDist) {
+                        const nx = dx / dist, ny = dy / dist;
+                        const overlap = minDist - dist;
+                        pos.x += nx * overlap * 1.1;
+                        pos.y += ny * overlap * 1.1;
+                        const vDotN = vel.x * nx + vel.y * ny;
+                        if (vDotN < 0) {
+                            vel.x = (vel.x - 2 * vDotN * nx) * bounceRestitution;
+                            vel.y = (vel.y - 2 * vDotN * ny) * bounceRestitution;
+                            vel.x += (Math.random() - 0.5) * 1.5;
+                            vel.y += (Math.random() - 0.5) * 0.5;
+                            if (Math.abs(vel.y) < 1) vel.y = -1.5;
+                            peg.classList.add('hit');
+                            setTimeout(() => peg.classList.remove('hit'), 100);
+                            pegCooldowns[i] = 3;
+                        }
+                    }
+                }
+                if (pos.x < ballRadius) { pos.x = ballRadius; vel.x = Math.abs(vel.x) * 0.7; }
+                if (pos.x > board.offsetWidth - ballRadius * 2) { pos.x = board.offsetWidth - ballRadius * 2; vel.x = -Math.abs(vel.x) * 0.7; }
+                ball.style.left = pos.x + 'px';
+                ball.style.top = pos.y + 'px';
+                if (pos.y > board.offsetHeight - 55) {
+                    clearInterval(dropInterval);
+                    ball.classList.remove('dropping');
+                    // Clear remaining trails
+                    trails.forEach(t => { if (t.parentNode) t.remove(); });
+                    finishDrop(ball, bet, pos.x + ballRadius);
+                    activeBalls--;
+                }
+            }, 16);
+        }
+
+        function finishDrop(ball, bet, finalX) {
+            if (isGuest || !currentUser) return;
+            
+            const slots = document.querySelectorAll('.slot');
+            const boardWidth = document.getElementById('plinkoBoard').offsetWidth;
+            const slotWidth = boardWidth / slots.length;
+            const slotIndex = Math.min(Math.max(Math.floor(finalX / slotWidth), 0), slots.length - 1);
+            const slot = slots[slotIndex];
+            const multiplier = parseFloat(slot.dataset.multiplier) || 1;
+            const win = bet * multiplier;
+            balance += win;
+            updateBalance();
+            updateBalanceOnServer(balance, 'set');
+            
+            gameInProgress = false; // Mark game as complete
+            
+            slot.classList.add('active');
+            const popup = document.getElementById('resultPopup');
+            const label = document.getElementById('resultLabel');
+            const amount = document.getElementById('resultAmount');
+            if (win >= bet) {
+                popup.className = 'result-popup show win';
+                label.textContent = 'WIN!';
+            } else {
+                popup.className = 'result-popup show lose';
+                label.textContent = 'LOSS';
+            }
+            amount.textContent = (win >= bet ? '+' : '-') + '$' + Math.abs(win - bet).toFixed(2);
+            setTimeout(() => {
+                popup.classList.remove('show');
+                ball.remove();
+            }, 1500);
+        }
+
+        function createDeck() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+            const deck = [];
+            for (let suit of suits) for (let value of values) deck.push({ suit, value, numeric: getCardValue(value) });
+            return shuffle(deck);
+        }
+
+        function shuffle(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        function getCardValue(value) {
+            if (['J', 'Q', 'K'].includes(value)) return 10;
+            if (value === 'A') return 11;
+            return parseInt(value);
+        }
+
+        async function dealBlackjack() {
+            if (isGuest || !currentUser) {
+                showToast('Sign in to play!');
+                return;
+            }
+            
+            if (bjDealing) return;
+            bjBet = parseFloat(document.getElementById('bjBetInput').value) || 5;
+            if (bjBet <= 0) { showToast('Invalid bet!'); return; }
+            if (bjBet > balance) { showToast('Not enough balance!'); return; }
+            
+            gameInProgress = true; // Mark game as in progress
+            bjDealing = true;
+            updateBJControls();
+            balance -= bjBet;
+            updateBalance();
+            if (!isGuest) {
+                updateBalanceOnServer(balance, 'set');
+            }
+            bjDeck = createDeck();
+            bjPlayerHand = [];
+            bjDealerHand = [];
+            bjGameActive = true;
+            document.getElementById('playerHand').innerHTML = '';
+            document.getElementById('dealerHand').innerHTML = '';
+            document.getElementById('playerValue').textContent = '0';
+            document.getElementById('dealerValue').textContent = '?';
+            document.getElementById('gameMessage').textContent = 'Dealing...';
+            await dealCardWithDelay('player', bjDeck.pop(), 0);
+            await dealCardWithDelay('dealer', bjDeck.pop(), 400);
+            await dealCardWithDelay('player', bjDeck.pop(), 800);
+            await dealCardWithDelay('dealer', bjDeck.pop(), 1200, true);
+            bjDealing = false;
+            updateBJControls();
+            const playerValue = getHandValue(bjPlayerHand);
+            document.getElementById('playerValue').textContent = playerValue;
+            if (playerValue === 21) {
+                document.getElementById('gameMessage').textContent = 'BLACKJACK!';
+                await new Promise(r => setTimeout(r, 1000));
+                await revealDealerCard();
+                endBlackjack(true, 'BLACKJACK! +$' + (bjBet * 1.5).toFixed(2));
+                balance += bjBet * 2.5;
+                updateBalance();
+                if (!isGuest) {
+                    updateBalanceOnServer(balance, 'set');
+                }
+            } else {
+                document.getElementById('gameMessage').textContent = 'Your turn - Hit or Stand?';
+            }
+        }
+
+        function dealCardWithDelay(who, card, delay, faceDown = false) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (who === 'player') {
+                        bjPlayerHand.push(card);
+                        const handDiv = document.getElementById('playerHand');
+                        const cardEl = createCardElement(card, false, true);
+                        handDiv.appendChild(cardEl);
+                        document.getElementById('playerValue').textContent = getHandValue(bjPlayerHand);
+                    } else {
+                        bjDealerHand.push(card);
+                        const handDiv = document.getElementById('dealerHand');
+                        const cardEl = createCardElement(card, faceDown, !faceDown);
+                        handDiv.appendChild(cardEl);
+                    }
+                    resolve();
+                }, delay);
+            });
+        }
+
+        function createCardElement(card, faceDown = false, animate = false) {
+            const div = document.createElement('div');
+            if (faceDown) {
+                div.className = 'card card-back' + (animate ? ' dealing' : '');
+                div.style.cssText = 'width:70px;height:100px;background:linear-gradient(135deg,#3b82f6 0%,#1d4ed8 100%);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:30px';
+                div.textContent = '🎮';
+            } else {
+                const isRed = card.suit === '♥' || card.suit === '♦';
+                div.className = 'card ' + (isRed ? 'red' : 'black') + (animate ? ' dealing' : '');
+                div.style.cssText = 'width:70px;height:100px;background:white;border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:Orbitron,sans-serif;font-size:24px;font-weight:700;box-shadow:0 4px 10px rgba(0,0,0,0.3);color:' + (isRed ? 'var(--danger)' : 'var(--bg-dark)');
+                div.textContent = card.value + card.suit;
+            }
+            return div;
+        }
+
+        async function revealDealerCard() {
+            const dealerHand = document.getElementById('dealerHand');
+            const hiddenCard = dealerHand.querySelector('.card-back');
+            if (hiddenCard) {
+                const card = bjDealerHand[1];
+                const isRed = card.suit === '♥' || card.suit === '♦';
+                hiddenCard.style.background = 'white';
+                hiddenCard.style.color = isRed ? 'var(--danger)' : 'var(--bg-dark)';
+                hiddenCard.textContent = card.value + card.suit;
+            }
+            document.getElementById('dealerValue').textContent = getHandValue(bjDealerHand);
+        }
+
+        function getHandValue(hand) {
+            let value = hand.reduce((sum, card) => sum + card.numeric, 0);
+            let aces = hand.filter(c => c.value === 'A').length;
+            while (value > 21 && aces > 0) { value -= 10; aces--; }
+            return value;
+        }
+
+        async function hit() {
+            if (!bjGameActive || bjDealing) { showToast(bjDealing ? 'Wait for deal!' : 'Start a game!'); return; }
+            const card = bjDeck.pop();
+            bjPlayerHand.push(card);
+            const handDiv = document.getElementById('playerHand');
+            const cardEl = createCardElement(card, false, true);
+            handDiv.appendChild(cardEl);
+            document.getElementById('playerValue').textContent = getHandValue(bjPlayerHand);
+            await new Promise(r => setTimeout(r, 300));
+            if (getHandValue(bjPlayerHand) > 21) {
+                await revealDealerCard();
+                endBlackjack(false, 'BUST! You lose $' + bjBet.toFixed(2));
+            }
+        }
+
+        async function stand() {
+            if (!bjGameActive || bjDealing) { showToast(bjDealing ? 'Wait for deal!' : 'Start a game!'); return; }
+            bjGameActive = false;
+            updateBJControls();
+            await revealDealerCard();
+            await new Promise(r => setTimeout(r, 500));
+            while (getHandValue(bjDealerHand) < 17) {
+                document.getElementById('gameMessage').textContent = 'Dealer draws...';
+                await new Promise(r => setTimeout(r, 600));
+                const card = bjDeck.pop();
+                bjDealerHand.push(card);
+                const handDiv = document.getElementById('dealerHand');
+                const cardEl = createCardElement(card, false, true);
+                handDiv.appendChild(cardEl);
+                document.getElementById('dealerValue').textContent = getHandValue(bjDealerHand);
+                await new Promise(r => setTimeout(r, 400));
+            }
+            const playerVal = getHandValue(bjPlayerHand);
+            const dealerVal = getHandValue(bjDealerHand);
+            await new Promise(r => setTimeout(r, 500));
+            if (dealerVal > 21 || playerVal > dealerVal) {
+                const win = bjBet * 2;
+                balance += win;
+                endBlackjack(true, 'WIN! +$' + bjBet.toFixed(2));
+            } else if (playerVal === dealerVal) {
+                balance += bjBet;
+                endBlackjack(true, 'PUSH! Bet returned');
+            } else {
+                endBlackjack(false, 'LOSE! -$' + bjBet.toFixed(2));
+            }
+            updateBalance();
+            if (!isGuest) {
+                updateBalanceOnServer(balance, 'set');
+            }
+        }
+
+        async function doubleDown() {
+            if (!bjGameActive || bjDealing) { showToast(bjDealing ? 'Wait for deal!' : 'Start a game!'); return; }
+            if (balance < bjBet) { showToast('Not enough balance!'); return; }
+            balance -= bjBet;
+            bjBet *= 2;
+            updateBalance();
+            if (!isGuest) {
+                updateBalanceOnServer(balance, 'set');
+            }
+            const card = bjDeck.pop();
+            bjPlayerHand.push(card);
+            const handDiv = document.getElementById('playerHand');
+            const cardEl = createCardElement(card, false, true);
+            handDiv.appendChild(cardEl);
+            document.getElementById('playerValue').textContent = getHandValue(bjPlayerHand);
+            await new Promise(r => setTimeout(r, 400));
+            if (getHandValue(bjPlayerHand) > 21) {
+                await revealDealerCard();
+                endBlackjack(false, 'BUST! You lose $' + bjBet.toFixed(2));
+            } else {
+                await stand();
+            }
+        }
+
+        function endBlackjack(win, message) {
+            bjGameActive = false;
+            gameInProgress = false; // Mark game as complete
+            document.getElementById('gameMessage').textContent = message;
+            updateBJControls();
+            setTimeout(() => { document.getElementById('gameMessage').textContent = 'Place your bet!'; }, 3000);
+        }
+
+        function updateBJControls() {
+            document.getElementById('dealBtn').disabled = bjGameActive || bjDealing;
+            document.getElementById('hitBtn').disabled = !bjGameActive || bjDealing;
+            document.getElementById('standBtn').disabled = !bjGameActive || bjDealing;
+            document.getElementById('doubleBtn').disabled = !bjGameActive || bjDealing || balance < bjBet || bjPlayerHand.length > 2;
+        }
+    </script>
+</body>
+</html>
